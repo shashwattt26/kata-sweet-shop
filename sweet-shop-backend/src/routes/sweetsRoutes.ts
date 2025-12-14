@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticateToken } from '../middleware/authMiddleware';
-import { addSweet, getAllSweets, updateSweet } from '../controllers/sweetsController'; // Import it
+import { addSweet, getAllSweets, updateSweet, deleteSweet } from '../controllers/sweetsController';
+import { isAdmin } from '../middleware/adminMiddleware';
 
 const router = Router();
 
@@ -8,5 +9,6 @@ const router = Router();
 router.post('/', authenticateToken, addSweet);
 router.get('/', authenticateToken, getAllSweets);
 router.put('/:id', authenticateToken, updateSweet);
+router.delete('/:id', authenticateToken, deleteSweet);
 
 export default router;

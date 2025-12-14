@@ -95,3 +95,42 @@ describe('Sweets Endpoints', () => {
         expect(updatedSweet?.quantity).toEqual(10); // Should remain unchanged
     });
 });
+
+describe('Admin Only Endpoints', () => {
+        it('should delete a sweet if user is Admin', async () => {
+            // 1. Setup: Create a sweet to delete
+            const sweetRepo = AppDataSource.getRepository(Sweet);
+            const sweet = await sweetRepo.save({ 
+                name: 'To Delete', category: 'Temp', price: 1, quantity: 1 
+            });
+
+            // 2. Setup: Promote our test user to 'admin' directly in DB
+            // (In a real app, you'd have a seed script or super-admin endpoint)
+            const userRepo = AppDataSource.getRepository(User);
+            const user = await userRepo.findOneBy({ username: 'adminuser' });
+            if (user) {
+                user.role = 'admin';
+                await userRepo.save(user);
+            }
+
+            // 3. We need a NEW token because the role in the old token is stale ('user')
+            const loginRes = await request(app).post('/api/auth/login').send({
+                username: 'adminuser',
+                password: 'adminpassword'
+            });
+            const adminToken = loginRes.body.token;
+
+            // 4. Act: Delete
+            const res = await request(app)
+                .delete(`/api/sweets/${sweet.id}`)
+                .set('Authorization', `Bearer ${adminToken}`);
+
+            // 5. Assert
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.message).toEqual('Sweet deleted successfully');
+            
+            // Verify it's gone
+            const deletedSweet = await sweetRepo.findOneBy({ id: sweet.id });
+            expect(deletedSweet).toBeNull();
+        });
+    });
