@@ -21,3 +21,37 @@ export const addSweet = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Error adding sweet" });
     }
 };
+
+export const getAllSweets = async (req: Request, res: Response) => {
+    try {
+        const sweetRepository = AppDataSource.getRepository(Sweet);
+        const sweets = await sweetRepository.find();
+        return res.status(200).json(sweets);
+    } catch (error) {
+        return res.status(500).json({ message: "Error retrieving sweets" });
+    }
+};
+
+export const updateSweet = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const sweetRepository = AppDataSource.getRepository(Sweet);
+        
+        // 1. Find the sweet
+        const sweet = await sweetRepository.findOneBy({ id: parseInt(id) });
+
+        if (!sweet) {
+            return res.status(404).json({ message: "Sweet not found" });
+        }
+
+        // 2. Merge new data into the existing object
+        sweetRepository.merge(sweet, req.body);
+
+        // 3. Save changes
+        const results = await sweetRepository.save(sweet);
+
+        return res.status(200).json({ message: "Sweet updated successfully", sweet: results });
+    } catch (error) {
+        return res.status(500).json({ message: "Error updating sweet" });
+    }
+};
