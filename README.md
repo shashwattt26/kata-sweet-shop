@@ -1,20 +1,28 @@
-#🍬 Sweet Shop ApplicationA full-stack application for managing a sweet shop inventory. This project allows administrators to stock sweets and customers to purchase them, featuring real-time stock updates and secure authentication.
+🍬 Sweet Shop Application
+A full-stack application for managing a sweet shop inventory. This project allows administrators to stock sweets and customers to purchase them, featuring real-time stock updates and secure authentication.
 
-##🚀 Tech Stack**Frontend:**
+🚀 Tech Stack
+Frontend:
 
-* **Framework:** React (Vite)
-* **Language:** TypeScript
-* **Styling:** Tailwind CSS
-* **State/API:** Axios, React Hooks
+Framework: React (Vite)
 
-**Backend:**
+Language: TypeScript
 
-* **Runtime:** Node.js
-* **Framework:** Express.js
-* **Language:** TypeScript
-* **Database:** SQLite (with TypeORM)
-* **Authentication:** JWT (JSON Web Tokens)
+Styling: Tailwind CSS
 
+State/API: Axios, React Hooks
+
+Backend:
+
+Runtime: Node.js
+
+Framework: Express.js
+
+Language: TypeScript
+
+Database: SQLite (with TypeORM)
+
+Authentication: JWT (JSON Web Tokens)
 ---
 
 ##🛠️ Setup & InstallationThis project requires **two separate terminals** running simultaneously (one for the backend, one for the frontend).
