@@ -1,12 +1,14 @@
 import express from 'express';
 import authRoutes from './routes/authRoutes';
+import sweetsRoutes from './routes/sweetsRoutes'; // Import this
 import { AppDataSource } from './data-source';
 
 const app = express();
 app.use(express.json());
 
-// Connect Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/sweets', sweetsRoutes); // Add this line
+
 
 // Initialize DB connection (if not in test mode, usually)
 // For Jest, we usually initialize inside the test or a setup file, 
