@@ -1,6 +1,9 @@
 🍬 Sweet Shop Application
 A full-stack application for managing a sweet shop inventory. This project allows administrators to stock sweets and customers to purchase them, featuring real-time stock updates and secure authentication.
 
+![Demo Screenshot](dashboard.png)
+
+
 🚀 Tech Stack
 Frontend:
 
@@ -25,9 +28,9 @@ Database: SQLite (with TypeORM)
 Authentication: JWT (JSON Web Tokens)
 ---
 
-##🛠️ Setup & InstallationThis project requires **two separate terminals** running simultaneously (one for the backend, one for the frontend).
+🛠️ Setup & InstallationThis project requires **two separate terminals** running simultaneously (one for the backend, one for the frontend).
 
-###1. Backend Setup1. Navigate to the backend folder:
+1. Backend Setup1. Navigate to the backend folder:
 ```bash
 cd sweet-shop-backend
 
@@ -48,9 +51,9 @@ npm run dev
 ```
 
 
-*Server will start on `http://localhost:3000*`
+Server will start on `http://localhost:3000*`
 
-###2. Frontend Setup1. Open a new terminal and navigate to the frontend folder:
+2. Frontend Setup1. Open a new terminal and navigate to the frontend folder:
 ```bash
 cd sweet-shop-frontend
 
@@ -71,20 +74,21 @@ npm run dev
 ```
 
 
-*App will run at `http://localhost:5173*`
+App will run at `http://localhost:5173*`
 
 ---
 
-##🔑 Key Features* **User Authentication:** Secure Login and Registration system.
-* **Admin Dashboard:** Admins can add new sweets (Name, Category, Price, Quantity) to the inventory.
-* **Shopping:** Users can view available sweets and purchase them.
-* **Real-time Stock Logic:** Items automatically show as "Sold Out" when quantity hits 0, preventing further purchases.
+🔑 Key Features:
+  **User Authentication:** Secure Login and Registration system.
+  **Admin Dashboard:** Admins can add new sweets (Name, Category,  Price, Quantity) to the inventory.
+  **Shopping:** Users can view available sweets and purchase them.
+  **Real-time Stock Logic:** Items automatically show as "Sold Out" when quantity hits 0, preventing further purchases.
 
 ---
 
-##📡 API Endpoints| Method | Endpoint | Description |
+📡 API Endpoints| Method | Endpoint | Description |
 | --- | --- | --- |
-| `POST` | `/api/auth/register` | Register a new user (Admin/User) |
+| `POST` | `/api/auth/register` | Register a new user (AdminUser) |
 | `POST` | `/api/auth/login` | Login and receive JWT token |
 | `GET` | `/api/sweets` | Get list of all sweets |
 | `POST` | `/api/sweets` | Add a new sweet (Admin only) |
@@ -92,9 +96,9 @@ npm run dev
 
 ---
 
-##🤖 My AI Usage###AI Tools Used* **Gemini (Google):** Used as the primary pair programmer and debugging assistant throughout the development lifecycle.
+🤖 My AI Usage AI Tools Used: **Gemini (Google):** Used as the primary pair programmer and debugging assistant throughout the development lifecycle.
 
-###How I Used AI1. **Debugging & Error Resolution:**
+How I Used AI1. **Debugging & Error Resolution:**
 * I used Gemini to diagnose a "Black Screen" issue in React, identifying that `main.tsx` had incorrect import paths.
 * When I encountered a "Version Mismatch" error with Tailwind CSS (accidentally installing v4 Beta), I used Gemini to identify the conflict and downgrade to the stable v3 version.
 * I leveraged AI to interpret cryptic `ERR_CONNECTION_REFUSED` errors, leading to the discovery that my Backend server wasn't running or CORS was missing.
