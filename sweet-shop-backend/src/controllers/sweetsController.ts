@@ -73,3 +73,53 @@ export const deleteSweet = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Error deleting sweet" });
     }
 };
+
+export const purchaseSweet = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { quantity } = req.body; // Expect quantity from frontend
+        const qtyToBuy = quantity || 1; // Default to 1 if not specified
+
+        const sweetRepository = AppDataSource.getRepository(Sweet);
+        const sweet = await sweetRepository.findOneBy({ id: parseInt(id) });
+
+        if (!sweet) {
+            return res.status(404).json({ message: "Sweet not found" });
+        }
+
+        if (sweet.quantity < qtyToBuy) {
+            return res.status(400).json({ message: "Insufficient stock" });
+        }
+
+        // Decrease quantity
+        sweet.quantity -= qtyToBuy;
+        await sweetRepository.save(sweet);
+
+        return res.status(200).json({ message: "Purchase successful", sweet });
+    } catch (error) {
+        return res.status(500).json({ message: "Error processing purchase" });
+    }
+};
+
+export const restockSweet = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { quantity } = req.body; 
+        const qtyToAdd = quantity || 1; 
+
+        const sweetRepository = AppDataSource.getRepository(Sweet);
+        const sweet = await sweetRepository.findOneBy({ id: parseInt(id) });
+
+        if (!sweet) {
+            return res.status(404).json({ message: "Sweet not found" });
+        }
+
+        // Increase quantity
+        sweet.quantity += qtyToAdd;
+        await sweetRepository.save(sweet);
+
+        return res.status(200).json({ message: "Restock successful", sweet });
+    } catch (error) {
+        return res.status(500).json({ message: "Error restocking sweet" });
+    }
+};

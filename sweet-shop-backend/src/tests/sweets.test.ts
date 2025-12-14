@@ -134,3 +134,99 @@ describe('Admin Only Endpoints', () => {
             expect(deletedSweet).toBeNull();
         });
     });
+
+describe('Inventory Endpoints', () => {
+        it('should decrease quantity when purchasing a sweet', async () => {
+            // 1. Setup: Create sweet with 10 items
+            const sweetRepo = AppDataSource.getRepository(Sweet);
+            const sweet = await sweetRepo.save({ 
+                name: 'Candy Cane', category: 'Seasonal', price: 1.50, quantity: 10 
+            });
+
+            // 2. Act: Purchase 2 items
+            const res = await request(app)
+                .post(`/api/sweets/${sweet.id}/purchase`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({ quantity: 2 });
+
+            // 3. Assert
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.message).toEqual('Purchase successful');
+            
+            // Verify DB quantity is now 8
+            const updatedSweet = await sweetRepo.findOneBy({ id: sweet.id });
+            expect(updatedSweet?.quantity).toEqual(8);
+        });
+
+        it('should return 400 if insufficient stock', async () => {
+            // 1. Setup: Create sweet with only 1 item
+            const sweetRepo = AppDataSource.getRepository(Sweet);
+            const sweet = await sweetRepo.save({ 
+                name: 'Rare Candy', category: 'Rare', price: 100, quantity: 1 
+            });
+
+            // 2. Act: Try to purchase 5
+            const res = await request(app)
+                .post(`/api/sweets/${sweet.id}/purchase`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({ quantity: 5 });
+
+            // 3. Assert
+            expect(res.statusCode).toEqual(400);
+            expect(res.body.message).toEqual('Insufficient stock');
+        });
+
+        it('should allow Admin to restock a sweet', async () => {
+            // 1. Setup: Create sweet
+            const sweetRepo = AppDataSource.getRepository(Sweet);
+            const sweet = await sweetRepo.save({ 
+                name: 'Empty Jar', category: 'Glass', price: 5.00, quantity: 0 
+            });
+
+            // 2. Setup: Promote user to Admin (reusing logic or assuming existing admin token)
+            // Ideally, reuse the adminToken logic from the previous Admin test, 
+            // OR re-login as admin here if scope is an issue.
+            // Let's quickly re-login to be safe:
+             const userRepo = AppDataSource.getRepository(User);
+             const adminUser = await userRepo.findOneBy({ username: 'adminuser' });
+             if (adminUser) {
+                 adminUser.role = 'admin';
+                 await userRepo.save(adminUser);
+             }
+            const resLogin = await request(app).post('/api/auth/login').send({
+                username: 'adminuser',
+                password: 'adminpassword'
+            });
+            const adminToken = resLogin.body.token;
+
+            // 3. Act: Restock 50 items
+            const res = await request(app)
+                .post(`/api/sweets/${sweet.id}/restock`)
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({ quantity: 50 });
+
+            // 4. Assert
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.message).toEqual('Restock successful');
+            
+            const updatedSweet = await sweetRepo.findOneBy({ id: sweet.id });
+            expect(updatedSweet?.quantity).toEqual(50);
+        });
+
+        it('should forbid non-admin from restocking', async () => {
+            // 1. Setup: Create sweet
+            const sweetRepo = AppDataSource.getRepository(Sweet);
+            const sweet = await sweetRepo.save({ 
+                name: 'Forbidden Cookie', category: 'Secret', price: 10, quantity: 0 
+            });
+
+            // 2. Act: Try to restock with regular authToken (from beforeAll)
+            const res = await request(app)
+                .post(`/api/sweets/${sweet.id}/restock`)
+                .set('Authorization', `Bearer ${authToken}`) // This is the normal user token
+                .send({ quantity: 10 });
+
+            // 3. Assert
+            expect(res.statusCode).toEqual(403);
+        });
+    });
