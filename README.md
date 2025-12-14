@@ -1,4 +1,4 @@
-🍬 Sweet Shop Application
+🍬 Sweet Shop Application: 
 A full-stack application for managing a sweet shop inventory. This project allows administrators to stock sweets and customers to purchase them, featuring real-time stock updates and secure authentication.
 
 ![Demo Screenshot](dashboard.png)
@@ -28,9 +28,10 @@ Database: SQLite (with TypeORM)
 Authentication: JWT (JSON Web Tokens)
 ---
 
-🛠️ Setup & InstallationThis project requires **two separate terminals** running simultaneously (one for the backend, one for the frontend).
+🛠️ Setup & Installation : This project requires **two separate terminals** running simultaneously (one for the backend, one for the frontend).
 
-1. Backend Setup1. Navigate to the backend folder:
+**1. Backend Setup**
+1. Navigate to the backend folder:
 ```bash
 cd sweet-shop-backend
 
@@ -53,7 +54,8 @@ npm run dev
 
 Server will start on `http://localhost:3000*`
 
-2. Frontend Setup1. Open a new terminal and navigate to the frontend folder:
+**2. Frontend Setup**
+1. Open a new terminal and navigate to the frontend folder:
 ```bash
 cd sweet-shop-frontend
 
@@ -86,7 +88,9 @@ App will run at `http://localhost:5173*`
 
 ---
 
-📡 API Endpoints| Method | Endpoint | Description |
+📡 API Endpoints: 
+
+| Method | Endpoint | Description |
 | --- | --- | --- |
 | `POST` | `/api/auth/register` | Register a new user (AdminUser) |
 | `POST` | `/api/auth/login` | Login and receive JWT token |
